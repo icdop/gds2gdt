@@ -1,0 +1,10 @@
+* makefile
+
+header.make: basic definition
+
+liba.make: targets to make share library
+
+main.make: targets to make main executable
+
+test.make: targets to test program
+

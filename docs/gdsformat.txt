@@ -1,0 +1,99 @@
+GDSII format:
+
+[parameter lexical element]
+	NONE	: 00	: no data
+	BIT	: 01	: bit array
+	I2	: 02	: 2 bytes integer
+	I4	: 03	: 4 bytes integer
+	R4	: 04	: 4 bytes real
+	R8	: 05	: 8 bytes real
+	ASCII	: 06	: ASCII string
+
+[element]
+;       symbol            byte3	byte4
+;--------------------     ----- -----
+	HEADER		: 00	02	I2
+	BGNLIB		: 01	02	I2
+	LIBNAME		: 02	06	ASCII
+	UNITS		: 03	05	R8
+	ENDLIB		: 04	00
+	BGNSTR		: 05	02	I2
+	STRNAME		: 06	06	ASCII
+	ENDSTR		: 07	00
+	BOUNDARY	: 08	00
+	PATH		: 09	00
+	SREF		: 0A	00
+	AREF		: 0B	00
+	TEXT		: 0C	00
+	LAYER		: 0D	02	I2
+	DATATYPE	: 0E	02	I2
+	WIDTH		: 0F	03	I4
+	XY		: 10	03	I4
+	ENDEL		: 11	00
+	SNAME		: 12	06	ASCII
+	COLROW		: 13	02	I2
+	TEXTNODE	: 14
+	NODE		: 15	00
+	TEXTTYPE	: 16	02	I2
+	PRESENTATION	: 17	01	BIT ARRAY
+	SPACING		: 18
+	STRING		: 19	06	ASCII
+	STRANS		: 1A	01	BIT ARRAY
+	MAG		: 1B	05	R8
+	ANGLE		: 1C	05	R8
+	UINTEGER	: 1D
+	USTRING		: 1E
+	REFLIBS		: 1F	06	ASCII
+	FONTS		: 20	06	ASCII
+	PATHTYPE	: 21	02	I2
+	GENERATIONS	: 22	02	I4
+	ATTRTABLE	: 23	06	ASCII
+	STYPTABLE	: 24	06	ASCII
+	STRTYPE		: 25	06	ASCII
+	ELFLAGS		: 26	01	BIT ARRAY
+	ELKEY		: 27
+	LINKTYPE	: 28
+	LINKKEYS	: 29
+	NODETYPE	: 2A	02	I2
+	PROPATTR	: 2B	02	I2
+	PROPVALUE	: 2C	06	ASCII
+	BOX		: 2D	00
+	BOXTYPE		: 2E	02	I2
+	PLEX		: 2F	03	I4
+	BGNEXTN		: 30
+	ENDEXTN		: 31
+	TAPENUM		: 32
+	TAPECODE	: 33
+	STRCLASS	: 34
+	RESERVED	: 35
+	FORMAT		: 36	02	I2
+	MASK		: 37	06	ASCII
+	ENDMASK		: 38	00
+	LIBDIRSIZE	: 39
+	SRFNAME		: 3A	06	ASCII
+	LIBSECUR	: 3B
+
+[syntax]
+GDS:		records;
+records:	record | records record;
+record:		record_length header data;
+
+record_length:	I2 { length of this record };
+
+header:		record_type data_type;
+
+record_type:	0x00	{ return (GDS_HEADER);  }
+		|0x01	{ return (GDS_BGNLIB);  }
+		|0x02	{ return (GDS_LIBNAME); }
+		;
+
+data_type:	0x00	{ return (GDS_NODATA);   }
+		|0x01	{ return (GDS_BITARRAY); }
+		|0x02	{ return (GDS_I2); }
+		|0x03	{ return (GDS_I4); }
+		|0x04	{ return (GDS_R4); }
+		|0x05	{ return (GDS_R8); }
+		|0x06	{ return (GDS_ASCII); }
+		;
+
+I2: byte byte { };
